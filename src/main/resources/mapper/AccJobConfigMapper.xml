@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.airwallex.batchjobs.repository.mapper.JobConfigMapper" >
+
+    <resultMap id="BaseResultMap" type="com.airwallex.batchjobs.repository.model.JobConfigDO" >
+        <result column="id"                     jdbcType="VARCHAR"      property="id"              />
+        <result column="create_time"            jdbcType="TIMESTAMP"    property="createTime"      />
+        <result column="last_update"            jdbcType="TIMESTAMP"    property="lastUpdate"      />
+        <result column="version"                jdbcType="INTEGER"      property="version"         />
+        <result column="job_name"               jdbcType="VARCHAR"      property="jobName"         />
+        <result column="job_group"              jdbcType="VARCHAR"      property="jobGroup"        />
+        <result column="job_class"              jdbcType="VARCHAR"      property="jobClass"        />
+        <result column="env_tag"                jdbcType="VARCHAR"      property="envTag"          />
+        <result column="exec_date"              jdbcType="TIMESTAMP"    property="execDate"        />
+        <result column="status"                 jdbcType="VARCHAR"      property="status"          />
+        <result column="is_loading"             jdbcType="VARCHAR"      property="isLoading"       />
+        <result column="job_cron_express"       jdbcType="VARCHAR"      property="jobCronExpress"  />
+        <result column="job_time_zone"          jdbcType="VARCHAR"      property="jobTimeZone"     />
+        <result column="retry_times"            jdbcType="VARCHAR"      property="retryTimes"      />
+        <result column="last_exec_time"         jdbcType="TIMESTAMP"    property="lastExecTime"    />
+        <result column="next_exec_time"         jdbcType="TIMESTAMP"    property="nextExecTime"    />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        ID,
+        CREATE_TIME,
+        LAST_UPDATE,
+        VERSION,
+        JOB_NAME,
+        JOB_GROUP,
+        JOB_CLASS,
+        ENV_TAG,
+        EXEC_DATE,
+        STATUS,
+        IS_LOADING,
+        JOB_CRON_EXPRESS,
+        JOB_TIME_ZONE,
+        RETRY_TIMES,
+        LAST_EXEC_TIME,
+        NEXT_EXEC_TIME
+    </sql>
+
+    <insert id="insert" parameterType="com.airwallex.batchjobs.repository.model.JobConfigDO">
+        /* job_config.insert */
+        INSERT INTO
+            JOB_CONFIG(
+                ID,
+                CREATE_TIME,
+                LAST_UPDATE,
+                VERSION,
+                JOB_NAME,
+                JOB_GROUP,
+                JOB_CLASS,
+                ENV_TAG,
+                EXEC_DATE,
+                STATUS,
+                IS_LOADING,
+                JOB_CRON_EXPRESS,
+                JOB_TIME_ZONE,
+                RETRY_TIMES,
+                LAST_EXEC_TIME,
+                NEXT_EXEC_TIME
+        )VALUES(
+            #{id}::uuid,
+            now(),
+            now(),
+            #{version},
+            #{jobName},
+            #{jobGroup},
+            #{jobClass},
+            #{envTag},
+            #{execDate},
+            #{status},
+            #{isLoading},
+            #{jobCronExpress},
+            #{jobTimeZone},
+            #{retryTimes},
+            #{lastExecTime},
+            #{nextExecTime}
+        )
+    </insert>
+
+    <select id="selectForUpdateById" parameterType="java.lang.String" resultMap="BaseResultMap">
+        /* job_config.selectForUpdateBySelective */
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            JOB_CONFIG
+        WHERE ID = #{id, jdbcType=VARCHAR}::uuid
+        FOR UPDATE NOWAIT
+    </select>
+
+    <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+        /* job_config.selectForUpdateBySelective */
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        JOB_CONFIG
+        WHERE ID = #{id, jdbcType=VARCHAR}::uuid
+    </select>
+
+    <!-- 根据条件查询JOB配置信息 -->
+    <select id="selectByList" parameterType="com.airwallex.batchjobs.repository.model.request.JobConfigRequestDO" resultMap="BaseResultMap">
+        /* job_config.selectByList */
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            JOB_CONFIG
+        WHERE
+            1 = 1
+            <if test="id != null" >
+                AND ID = #{id, jdbcType=VARCHAR}::uuid
+            </if>
+            <if test="isLoading != null">
+                AND IS_LOADING = #{isLoading}
+            </if>
+            <if test="jobGroup != null">
+                AND JOB_GROUP = #{jobGroup}
+            </if>
+            <if test="jobClass != null">
+                AND JOB_CLASS = #{jobClass}
+            </if>
+            <if test="jobName != null">
+                AND JOB_NAME = #{jobName}
+            </if>
+            <if test="envTag != null">
+                AND ENV_TAG = #{envTag}
+            </if>
+    </select>
+
+    <update id="updateById" parameterType="com.airwallex.batchjobs.repository.model.JobConfigDO">
+        /* job_config.updateBySelective */
+        UPDATE
+            JOB_CONFIG
+        SET
+            LAST_UPDATE = now(),
+            VERSION = VERSION + 1
+            <if test="execDate!=null">
+                ,EXEC_DATE = #{execDate,jdbcType=DATE}
+            </if>
+            <if test="status!=null and status != ''">
+                ,STATUS = #{status}
+            </if>
+            <if test="isLoading!=null and isLoading != ''">
+                ,IS_LOADING = #{isLoading}
+            </if>
+            <if test="retryTimes!=null and retryTimes != 0">
+                ,RETRY_TIMES = #{retryTimes}
+            </if>
+            <if test="jobCronExpress!=null and jobCronExpress != ''">
+                ,JOB_CRON_EXPRESS = #{jobCronExpress}
+            </if>
+            <if test="lastExecTime!=null">
+                ,LAST_EXEC_TIME = #{lastExecTime}
+            </if>
+            <if test="nextExecTime!=null">
+                ,NEXT_EXEC_TIME = #{nextExecTime}
+            </if>
+        WHERE
+            ID = #{id, jdbcType=VARCHAR}::uuid
+    </update>
+
+</mapper>

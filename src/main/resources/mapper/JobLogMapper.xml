@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.airwallex.batchjobs.repository.mapper.JobLogMapper" >
+
+    <resultMap id="BaseResultMap" type="com.airwallex.batchjobs.repository.model.JobLogDO" >
+        <result column="ID"            property="id"           jdbcType="VARCHAR" />
+        <result column="CREATE_TIME"   property="createTime"   jdbcType="TIMESTAMP" />
+        <result column="LAST_UPDATE"   property="lastUpdate"   jdbcType="TIMESTAMP" />
+        <result column="VERSION"       property="version"      jdbcType="INTEGER" />
+        <result column="JOB_ID"        property="jobId"        jdbcType="VARCHAR" />
+        <result column="JOB_NAME"      property="jobName"      jdbcType="VARCHAR" />
+        <result column="JOB_GROUP"     property="jobGroup"     jdbcType="VARCHAR" />
+        <result column="ENV_TAG"       property="envTag"       jdbcType="VARCHAR" />
+        <result column="MACHINE_IP"    property="machineIp"    jdbcType="VARCHAR" />
+        <result column="EXEC_DATE"     property="execDate"     jdbcType="DATE" />
+        <result column="STATUS"        property="status"       jdbcType="VARCHAR" />
+        <result column="ERROR_MSG"     property="errorMsg"     jdbcType="VARCHAR" />
+        <result column="START_TIME"    property="startTime"    jdbcType="TIMESTAMP" />
+        <result column="EXEC_TIMES"    property="execTimes"    jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        ID,
+        CREATE_TIME,
+        LAST_UPDATE,
+        VERSION,
+        JOB_ID,
+        JOB_NAME,
+        JOB_GROUP,
+        ENV_TAG,
+        MACHINE_IP,
+        EXEC_DATE,
+        STATUS,
+        ERROR_MSG,
+        START_TIME,
+        EXEC_TIMES
+    </sql>
+
+    <insert id="insert" parameterType="com.airwallex.batchjobs.repository.model.JobLogDO">
+        /* job_logs.insert */
+        INSERT
+        INTO
+            JOB_LOGS(
+            ID,
+            CREATE_TIME,
+            LAST_UPDATE,
+            VERSION,
+            JOB_ID,
+            JOB_NAME,
+            JOB_GROUP,
+            ENV_TAG,
+            MACHINE_IP,
+            EXEC_DATE,
+            STATUS,
+            ERROR_MSG,
+            START_TIME,
+            EXEC_TIMES
+        )VALUES(
+            #{id, jdbcType=VARCHAR}::uuid,
+            now(),
+            now(),
+            #{version, jdbcType=INTEGER},
+            #{jobId,jdbcType=VARCHAR}::uuid,
+            #{jobName,jdbcType=VARCHAR},
+            #{jobGroup,jdbcType=VARCHAR},
+            #{envTag,jdbcType=VARCHAR},
+            #{machineIp,jdbcType=VARCHAR},
+            #{execDate,jdbcType=DATE},
+            #{status,jdbcType=VARCHAR},
+            #{errorMsg,jdbcType=VARCHAR},
+            now(),
+            #{execTimes,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <select id="selectByList" parameterType="com.airwallex.batchjobs.repository.model.JobLogDO" resultMap="BaseResultMap">
+        /* job_logs.selectByList */
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            JOB_LOGS
+        WHERE
+            1=1
+            <if test="id != null">
+                AND ID = #{id, jdbcType=VARCHAR}::uuid
+            </if>
+            <if test="jobId != null">
+                AND JOB_ID = #{jobId, jdbcType=VARCHAR}::uuid
+            </if>
+            <if test="jobName != null">
+                AND JOB_NAME = #{jobName, jdbcType=VARCHAR}
+            </if>
+            <if test="execDate != null">
+                AND EXEC_DATE = #{execDate, jdbcType=DATE}
+            </if>
+            <if test="status != null">
+                AND STATUS = #{status, jdbcType=VARCHAR}
+            </if>
+    </select>
+
+    <select id="selectCount" parameterType="com.airwallex.batchjobs.repository.model.request.JobLogRequestDO" resultType="java.lang.Integer">
+        /* job_logs.selectCount */
+        SELECT
+            count(1)
+        FROM
+            JOB_LOGS
+        WHERE
+            EXEC_DATE = CAST( #{execDate, jdbcType=DATE} AS DATE )
+        <if test="jobId!=null">
+            AND JOB_ID = #{jobId,jdbcType=VARCHAR}::UUID
+        </if>
+        <if test="jobName!=null">
+            AND JOB_NAME = #{jobName,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null">
+            AND STATUS = #{status, jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <update id="update" parameterType="com.airwallex.batchjobs.repository.model.JobLogDO">
+        /* job_logs.update */
+        UPDATE
+            JOB_LOGS
+        SET
+            LAST_UPDATE = now(),
+            VERSION = VERSION + 1
+            <if test="execDate != null">
+                ,EXEC_DATE = #{execDate, jdbcType=DATE}
+            </if>
+            <if test="status != null and status != ''">
+                ,STATUS = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="errorMsg != null and errorMsg != ''">
+                ,ERROR_MSG = #{errorMsg,jdbcType=VARCHAR}
+            </if>
+            <if test="startTime != null">
+                ,START_TIME = #{startTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="execTimes != null">
+                ,EXEC_TIMES = #{execTimes,jdbcType=DECIMAL}
+            </if>
+        WHERE
+            1=1
+            <if test="id != null">
+                AND ID = #{id, jdbcType=VARCHAR}::uuid
+            </if>
+            <if test="jobId != null">
+                AND JOB_ID = #{jobId, jdbcType=VARCHAR}::uuid
+            </if>
+            <if test="jobName != null">
+                AND JOB_NAME = #{jobName, jdbcType=VARCHAR}
+            </if>
+            <if test="envTag != null">
+                AND ENV_TAG = #{envTag, jdbcType=VARCHAR}
+            </if>
+            <if test="execDate != null">
+                AND EXEC_DATE = #{execDate, jdbcType=DATE}
+            </if>
+    </update>
+
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+    <Properties>
+        <Property name="app-name">ledger-service</Property>
+    </Properties>
+    <Appenders>
+        <RollingFile name="RollingFile" fileName="/var/log/airwallex/${app-name}.log"
+                     filePattern="/var/log/airwallex/${app-name}-%i.log">
+            <PatternLayout
+                    pattern="%d{ISO8601} [%t] %-5level - %logger{1.} - %m%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="7"/>
+        </RollingFile>
+
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%d{ISO8601} [%t] %highlight{%-5level} - %logger{1.} - %highlight{%m%n}{INFO=yellow,WARN=red}"/>
+        </Console>
+
+        <Async name="ASYNC">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="Console"/>
+        </Async>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="org.springframework" level="error"/>
+        <Logger name="com.googlecode.jsonrpc4j" level="error"/>
+        <Logger name="com.airwallex" level="debug"/>
+        <Logger name="com.airwallex.batchjobs.repository" level="debug"/>
+        <Root level="WARN" additivity="false">
+            <AppenderRef ref="ASYNC"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
