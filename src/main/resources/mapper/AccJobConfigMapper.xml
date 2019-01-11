@@ -64,7 +64,7 @@
             #{id}::uuid,
             now(),
             now(),
-            #{version},
+            0,
             #{jobName},
             #{jobGroup},
             #{jobClass},

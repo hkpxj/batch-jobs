@@ -59,7 +59,7 @@
             #{id, jdbcType=VARCHAR}::uuid,
             now(),
             now(),
-            #{version, jdbcType=INTEGER},
+            0,
             #{jobId,jdbcType=VARCHAR}::uuid,
             #{jobName,jdbcType=VARCHAR},
             #{jobGroup,jdbcType=VARCHAR},

@@ -60,6 +60,7 @@ dependencies {
 	implementation('org.quartz-scheduler:quartz:2.3.0')
 	implementation('org.quartz-scheduler:quartz-jobs:2.3.0')
 	implementation('org.springframework:spring-context-support')
+	implementation('org.apache.commons:commons-lang3:3.1')
 	runtimeOnly('org.springframework.boot:spring-boot-devtools')
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 }

@@ -37,7 +37,7 @@ object IPUtil {
                 val addresses = netInterface.inetAddresses
                 while (addresses.hasMoreElements()) {
                     ip = addresses.nextElement() as InetAddress
-                    if (ip != null && ip is Inet4Address) {
+                    if (ip is Inet4Address) {
                         IP_ADDRESS = ip.hostAddress
                         return IP_ADDRESS
                     }

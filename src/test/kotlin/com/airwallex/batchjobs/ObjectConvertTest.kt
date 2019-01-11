@@ -1,6 +1,7 @@
 package com.airwallex.batchjobs
 
 import com.airwallex.batchjobs.manager.model.JobConfigBO
+import com.airwallex.batchjobs.task.dispatcher.Dispatcher
 
 /**
  *
@@ -12,5 +13,5 @@ class ObjectConvertTest {
 
 fun main(args: Array<String>) {
 
-    JobConfigBO::class.java.declaredFields.map { println( it.name + "= \" \"") }
+    Dispatcher::class.java.declaredFields.map { println( it.name + "= dispatcherProperties." + it.name) }
 }

@@ -19,3 +19,27 @@ mybatis:
   mapperLocations: classpath:mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
+
+application:
+  job:
+  batch:
+    envTag: dev
+
+dispatcher:
+  starter:
+    name: CoreDispatcher
+    runFlag: true
+  dispatcher-one:
+    name: TEST_ONE
+    coreSize: 10
+    maxSize: 10
+    queueSize: 100
+    noTaskSleepSeconds: 5
+
+  dispatcher-two:
+    name: TEST_TWO
+    coreSize: 5
+    maxSize: 5
+    queueSize: 1000
+    hungrySize: 800
+    noTaskSleepSeconds: 60

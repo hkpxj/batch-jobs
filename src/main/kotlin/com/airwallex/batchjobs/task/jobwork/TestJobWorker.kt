@@ -1,5 +1,6 @@
 package com.airwallex.batchjobs.task.jobwork
 
+import com.airwallex.batchjobs.manager.JobManager
 import com.airwallex.batchjobs.manager.model.JobConfigBO
 import org.apache.logging.log4j.LogManager
 
@@ -8,9 +9,9 @@ import org.apache.logging.log4j.LogManager
  * @author kun.hu
  * @createDate 2019-01-10
  */
-class TestJobWorker: AbstractJobWorker() {
+class TestJobWorker(override val jobManager: JobManager) : AbstractJobWorker {
 
-    private val log = LogManager.getLogger()
+    override val log = LogManager.getLogger()
 
     override fun beforeWorker(jobConfigBO: JobConfigBO) {
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN" monitorInterval="30">
     <Properties>
-        <Property name="app-name">ledger-service</Property>
+        <Property name="app-name">batch-jobs</Property>
     </Properties>
     <Appenders>
         <RollingFile name="RollingFile" fileName="/var/log/airwallex/${app-name}.log"

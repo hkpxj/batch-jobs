@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.airwallex.batchjobs.repository.mapper.BizLockMapper">
+
+    <resultMap id="BaseResultMap" type="com.airwallex.batchjobs.repository.model.BizLockDO">
+      <result column="ID"            property="id"           jdbcType="VARCHAR" />
+      <result column="CREATE_TIME"   property="createTime"   jdbcType="TIMESTAMP" />
+      <result column="LAST_UPDATE"   property="lastUpdate"   jdbcType="TIMESTAMP" />
+      <result column="VERSION"       property="version"      jdbcType="INTEGER" />
+      <result column="LOCK_NAME"      property="lockName"     jdbcType="VARCHAR" />
+      <result column="ENV_TAG"       property="envTag"       jdbcType="VARCHAR" />
+      <result column="STATUS"         property="status"       jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="BizLockDO_Base_Column_List">
+		    ID,
+        CREATE_TIME,
+        LAST_UPDATE,
+        VERSION,
+		    LOCK_NAME,
+		    ENV_TAG,
+		    STATUS
+	  </sql>
+
+    <select id="lock" resultMap="BaseResultMap"  parameterType="java.util.HashMap">
+      /* biz_lock.lock */
+      SELECT
+            <include refid="BizLockDO_Base_Column_List" />
+        FROM
+            BIZ_LOCK
+        WHERE
+            LOCK_NAME = #{lockName,jdbcType=VARCHAR}
+        AND
+            STATUS = #{status,jdbcType=VARCHAR}
+        AND
+            ENV_TAG = #{envTag,jdbcType=VARCHAR}
+        FOR UPDATE NOWAIT
+    </select>
+
+
+</mapper>

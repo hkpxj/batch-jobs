@@ -62,11 +62,10 @@ create table biz_cmd (
   env_tag           	  varchar(16) NOT NULL,
   is_doing          	  varchar(2)	NOT NULL,
   status            	  varchar(16) NOT NULL,
-  exec_date  			      date,
   retry_times       	  int4,
   max_retry_times   	  int4,
   next_exe_time     	  timestamp,
   enable_start_date 	  timestamp,
   enable_end_date   	  timestamp,
-  CONSTRAINT biz_cmd_pkey PRIMARY KEY(biz_id, exec_date)
+  CONSTRAINT biz_cmd_pkey PRIMARY KEY(biz_id)
 );

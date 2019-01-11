@@ -9,11 +9,10 @@ import com.airwallex.batchjobs.repository.model.request.JobLogRequestDO
 import com.airwallex.batchjobs.repository.model.request.toJobLogRequestDO
 import com.airwallex.batchjobs.task.job.constant.JobConstant
 import com.airwallex.batchjobs.task.job.enums.JobIsLoadingEnum
-import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import org.quartz.Job
 import org.quartz.JobExecutionContext
 import org.slf4j.MDC
-import org.springframework.beans.factory.annotation.Autowired
 import java.util.*
 
 /**
@@ -21,15 +20,15 @@ import java.util.*
  * @author kun.hu
  * @createDate 2019-01-10
  */
-abstract class AbstractJobWorker: Job {
+interface AbstractJobWorker: Job {
 
-    private val log = LogManager.getLogger()
+    val log: Logger
 
-    @Autowired
-    lateinit var jobManager: JobManager
+    val jobManager: JobManager
 
     override fun execute(context: JobExecutionContext) {
 
+        MDC.put("CORRELATION_ID", UUID.randomUUID().toString())
         val jobConfigBO = this.getJobDetailBO(context)
 
         log.warn("job is running: {}", jobConfigBO)
@@ -43,8 +42,6 @@ abstract class AbstractJobWorker: Job {
             jobConfigBO.execDate = Date()
         }
 
-
-        // 锁定JOB配置信息并新增日志
         try {
             if (jobManager.lockJobAddLog(jobConfigBO)) {
                 log.warn("lock job error:{} ", jobConfigBO)
@@ -89,13 +86,13 @@ abstract class AbstractJobWorker: Job {
     }
 
     @Throws(Exception::class)
-    abstract fun beforeWorker(jobConfigBO: JobConfigBO)
+    fun beforeWorker(jobConfigBO: JobConfigBO)
 
     @Throws(Exception::class)
-    abstract fun doWorker(jobConfigBO: JobConfigBO)
+    fun doWorker(jobConfigBO: JobConfigBO)
 
     @Throws(Exception::class)
-    abstract fun afterWorker(jobConfigBO: JobConfigBO)
+    fun afterWorker(jobConfigBO: JobConfigBO)
 
     private fun isMaxRetry(jobConfigBO: JobConfigBO): Boolean {
 

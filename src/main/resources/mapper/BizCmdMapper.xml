@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.airwallex.batchjobs.repository.mapper.BizCmdMapper">
+
+    <resultMap id="bizCmdMap" type="com.airwallex.batchjobs.repository.model.BizCmdDO">
+        <result column="id"                     jdbcType="VARCHAR"      property="id"              />
+        <result column="create_time"            jdbcType="TIMESTAMP"    property="createTime"      />
+        <result column="last_update"            jdbcType="TIMESTAMP"    property="lastUpdate"      />
+        <result column="version"                jdbcType="INTEGER"      property="version"         />
+        <result column="biz_id"                 property="bizId"                jdbcType="VARCHAR" />
+        <result column="biz_type"               property="bizType"              jdbcType="VARCHAR" />
+        <result column="server_ip"              property="serverIP"             jdbcType="VARCHAR" />
+        <result column="fail_reason"            property="failReason"           jdbcType="VARCHAR" />
+        <result column="env_tag"                property="envTag"               jdbcType="VARCHAR" />
+        <result column="is_doing"               property="isDoing"              jdbcType="VARCHAR" />
+        <result column="status"                 property="status"               jdbcType="VARCHAR" />
+        <result column="retry_times"            property="retryTimes"           jdbcType="INTEGER" />
+        <result column="max_retry_times"        property="maxRetryTimes"        jdbcType="INTEGER" />
+        <result column="next_exe_time"          property="nextExeTime"          jdbcType="TIMESTAMP" />
+        <result column="enable_start_date"      property="enableStartDate"      jdbcType="TIMESTAMP" />
+        <result column="enable_end_date"        property="enableEndDate"        jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="BizCmdDO_Base_Column_List">
+		    ID,
+        CREATE_TIME,
+        LAST_UPDATE,
+        VERSION,
+        BIZ_ID,
+        BIZ_TYPE,
+        SERVER_IP,
+        FAIL_REASON,
+        ENV_TAG,
+        IS_DOING,
+        STATUS,
+        RETRY_TIMES,
+        MAX_RETRY_TIMES,
+        NEXT_EXE_TIME,
+        ENABLE_START_DATE,
+        ENABLE_END_DATE
+	  </sql>
+
+    <insert id="insert" parameterType="com.airwallex.batchjobs.repository.model.BizCmdDO">
+		/* biz_cmd.insert */
+		INSERT INTO
+            BIZ_CMD(
+                ID,
+                CREATE_TIME,
+                LAST_UPDATE,
+                VERSION,
+                BIZ_ID,
+                BIZ_TYPE,
+                SERVER_IP,
+                FAIL_REASON,
+                ENV_TAG,
+                IS_DOING,
+                STATUS,
+                RETRY_TIMES,
+                MAX_RETRY_TIMES,
+                NEXT_EXE_TIME,
+                ENABLE_START_DATE,
+                ENABLE_END_DATE
+            )
+		VALUES(
+            #{id, jdbcType=VARCHAR}::uuid,
+            now(),
+            now(),
+            0,
+		        #{bizId,jdbcType=VARCHAR},
+            #{bizType,jdbcType=VARCHAR},
+            #{serverIP,jdbcType=VARCHAR},
+            #{failReason,jdbcType=VARCHAR},
+            #{envTag,jdbcType=VARCHAR},
+            #{isDoing,jdbcType=VARCHAR},
+            #{status,jdbcType=VARCHAR},
+		        #{retryTimes,jdbcType=INTEGER},
+            #{maxRetryTimes,jdbcType=INTEGER},
+            now(),
+            now(),
+		        now() + '1 day')
+	</insert>
+
+    <!-- 更新dispatch任务 -->
+    <update id="update" parameterType="com.airwallex.batchjobs.repository.model.BizCmdDO">
+		/* biz_cmd.update */
+		UPDATE
+		    BIZ_CMD
+		SET
+		    BIZ_ID = #{bizId,jdbcType=VARCHAR},
+		    BIZ_TYPE = #{bizType,jdbcType=VARCHAR},
+		    SERVER_IP = #{serverIP,jdbcType=VARCHAR},
+		    FAIL_REASON = #{failReason,jdbcType=VARCHAR},
+		    ENV_TAG = #{envTag,jdbcType=VARCHAR},
+		    IS_DOING = #{isDoing,jdbcType=VARCHAR},
+		    STATUS = #{status,jdbcType=VARCHAR},
+		    RETRY_TIMES = #{retryTimes,jdbcType=VARCHAR},
+		    MAX_RETRY_TIMES = #{maxRetryTimes,jdbcType=VARCHAR},
+		    NEXT_EXE_TIME = #{nextExeTime,jdbcType=TIMESTAMP},
+		    ENABLE_START_DATE = #{enableStartDate,jdbcType=TIMESTAMP},
+		    ENABLE_END_DATE = #{enableEndDate,jdbcType=TIMESTAMP},
+		    LAST_UPDATE = now(),
+        VERSION = VERSION + 1
+		WHERE
+		    ID = #{id,jdbcType=VARCHAR}::uuid
+		<![CDATA[
+        AND
+            CREATE_TIME >= now() + '-3 days'
+        ]]>
+	</update>
+
+    <!-- 查询需要执行的dispatch任务 -->
+    <select id="selectToDoCmdList" resultMap="bizCmdMap">
+        /* biz_cmd.selectToDoCmdList */
+        SELECT
+            <include refid="BizCmdDO_Base_Column_List" />
+        FROM
+            BIZ_CMD
+        WHERE
+            (STATUS = 'I' or STATUS = 'W')
+            AND
+            IS_DOING = 'n'
+            <![CDATA[
+            AND
+                NEXT_EXE_TIME <= now()
+            AND
+                ENABLE_START_DATE <= now()
+            AND
+                ENABLE_END_DATE > now()
+            AND
+                BIZ_TYPE = #{bizType,jdbcType=VARCHAR}
+            AND
+                ENV_TAG = #{envTag,jdbcType=VARCHAR}
+            AND
+                CREATE_TIME >= now() + '-3 days'
+            ]]>
+            LIMIT  #{cmdNum,jdbcType=INTEGER}
+
+    </select>
+
+    <select id="selectByBizIdAndType" resultMap="bizCmdMap">
+        /* biz_cmd.selectByBizIdAndType */
+        SELECT
+            <include refid="BizCmdDO_Base_Column_List" />
+        FROM
+            BIZ_CMD
+        WHERE
+            biz_id = #{bizId,jdbcType=VARCHAR}
+        AND
+            biz_type = #{bizType,jdbcType=VARCHAR}
+        <![CDATA[
+        AND
+            CREATE_TIME >= now() + '-3 days'
+        ]]>
+    </select>
+
+    <select id="selectByBizId" resultMap="bizCmdMap">
+        /* biz_cmd.selectByBizId */
+        SELECT
+            <include refid="BizCmdDO_Base_Column_List" />
+        FROM
+            BIZ_CMD
+        WHERE
+            biz_id = #{bizId,jdbcType=VARCHAR}
+        <![CDATA[
+        AND
+            CREATE_TIME >= now() + '-3 days'
+        ]]>
+    </select>
+
+    <!-- 激活dispatch任务 -->
+    <update id="reactiveCommand">
+        /* biz_cmd.reactiveCommand */
+        <![CDATA[
+            UPDATE
+                BIZ_CMD
+            SET
+                STATUS = 'W',
+                ENABLE_END_DATE = now() + '1 day',
+                LAST_UPDATE = now(),
+                VERSION = VERSION + 1
+             WHERE
+                biz_id = #{bizId,jdbcType=VARCHAR}
+             AND
+                CREATE_TIME >= now() + '-3 days'
+        ]]>
+    </update>
+
+    <update id="reactiveCommandsServerIP">
+        /* biz_cmd.reactiveCommandsServerIP */
+        UPDATE
+            BIZ_CMD
+        SET
+            is_doing = 'n',
+            ENABLE_END_DATE = now() + '1 day',
+            LAST_UPDATE = now(),
+            VERSION = VERSION + 1
+        WHERE
+            is_doing = 'y'
+        AND
+            SERVER_IP = #{serverIP,jdbcType=VARCHAR}
+        AND
+            ENABLE_END_DATE > now() + '1 day'
+        <![CDATA[
+        AND
+            CREATE_TIME >= now() + '-3 days'
+        ]]>
+	</update>
+
+    <update id="delayEndDate">
+      /* biz_cmd.delayEndDate */
+        <![CDATA[
+            UPDATE
+              BIZ_CMD
+            SET
+              ENABLE_END_DATE = now() + '1 day',
+              LAST_UPDATE = now(),
+              VERSION = VERSION + 1
+            WHERE
+                (STATUS = 'I' or STATUS = 'W')
+            AND
+                IS_DOING = 'n'
+            AND
+                ENABLE_END_DATE < now()
+            AND
+                CREATE_TIME >= now() + '-3 days'
+        ]]>
+	</update>
+
+</mapper>

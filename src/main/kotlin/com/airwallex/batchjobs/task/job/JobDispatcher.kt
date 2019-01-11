@@ -4,13 +4,17 @@ import com.airwallex.batchjobs.manager.JobManager
 import com.airwallex.batchjobs.manager.model.JobConfigBO
 import com.airwallex.batchjobs.task.job.enums.JobIsLoadingEnum
 import org.apache.logging.log4j.LogManager
+import org.slf4j.MDC
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
+import java.util.*
 
 @Component
 @EnableScheduling
+@ConditionalOnProperty("application.job")
 class JobDispatcher {
 
     private val log = LogManager.getLogger()
@@ -25,6 +29,7 @@ class JobDispatcher {
     @Scheduled(fixedRate = 1 * 60 * 1000)
     fun jobDispatcher() {
 
+        MDC.put("CORRELATION_ID", UUID.randomUUID().toString())
         log.info("dispatcher job starting!")
         try {
             val jobConfigBOList = jobManager.queryJobConfig(JobConfigBO())
