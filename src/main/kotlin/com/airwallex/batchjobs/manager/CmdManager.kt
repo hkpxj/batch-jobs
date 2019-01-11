@@ -85,12 +85,9 @@ class CmdManager {
     }
 
     @Throws(Exception::class)
-    fun insert(cmdObject: BizCmdDO?) {
+    fun insert(cmdObject: BizCmdDO) {
 
-        log.debug("call BaseCmdManager insert PARAMETER, cmdObject:{}", cmdObject)
-        if (cmdObject == null) {
-            throw Exception()
-        }
+        log.debug("call BaseCmdManager insert, cmdObject:{}", cmdObject)
         //add envTag
         cmdObject.envTag = batchJobsProperties.envTag
         bizCmdMapper.insert(cmdObject)

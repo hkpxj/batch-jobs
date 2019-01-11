@@ -5,6 +5,7 @@ import com.airwallex.batchjobs.manager.enums.FlagEnum
 import com.airwallex.batchjobs.manager.enums.JobConfigStatusEnum
 import com.airwallex.batchjobs.manager.enums.JobLogStatusEnum
 import com.airwallex.batchjobs.manager.model.JobConfigBO
+import com.airwallex.batchjobs.manager.util.RedisLockUtil
 import com.airwallex.batchjobs.repository.model.request.JobLogRequestDO
 import com.airwallex.batchjobs.repository.model.request.toJobLogRequestDO
 import com.airwallex.batchjobs.task.job.constant.JobConstant
@@ -12,8 +13,10 @@ import com.airwallex.batchjobs.task.job.enums.JobIsLoadingEnum
 import org.apache.logging.log4j.Logger
 import org.quartz.Job
 import org.quartz.JobExecutionContext
+import org.redisson.api.RLock
 import org.slf4j.MDC
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  *
@@ -25,6 +28,8 @@ interface AbstractJobWorker: Job {
     val log: Logger
 
     val jobManager: JobManager
+
+    val redisLockUtil: RedisLockUtil
 
     override fun execute(context: JobExecutionContext) {
 
@@ -42,14 +47,22 @@ interface AbstractJobWorker: Job {
             jobConfigBO.execDate = Date()
         }
 
+        var lock: RLock? = null
+
         try {
+
+            lock = redisLockUtil.getLock(jobConfigBO.jobName + "_" + jobConfigBO.jobGroup + "_" + jobConfigBO.envTag)
+            lock.lock(20, TimeUnit.SECONDS)
             if (jobManager.lockJobAddLog(jobConfigBO)) {
                 log.warn("lock job error:{} ", jobConfigBO)
+                lock.unlock()
                 return
             }
         } catch (e: Exception) {
             log.error("lock JobConfig Error, job name: ${jobConfigBO.jobName}")
             throw e
+        } finally {
+            lock?.unlock()
         }
 
         if (isMaxRetry(jobConfigBO)) {

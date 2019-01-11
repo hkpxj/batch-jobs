@@ -59,6 +59,7 @@ dependencies {
 	implementation('org.quartz-scheduler:quartz-jobs:2.3.0')
 	implementation('org.springframework:spring-context-support')
 	implementation('org.apache.commons:commons-lang3:3.1')
+	implementation('org.redisson:redisson-spring-boot-starter:3.9.1')
 	runtimeOnly('org.springframework.boot:spring-boot-devtools')
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 }

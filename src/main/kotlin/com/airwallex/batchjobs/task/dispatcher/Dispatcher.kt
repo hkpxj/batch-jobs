@@ -2,7 +2,11 @@ package com.airwallex.batchjobs.task.dispatcher
 
 import com.airwallex.batchjobs.configure.DispatcherProperties
 import com.airwallex.batchjobs.manager.CmdManager
+import com.airwallex.batchjobs.manager.util.RedisLockUtil
 import org.apache.logging.log4j.Logger
+import org.redisson.api.RLock
+import org.slf4j.MDC
+import java.util.*
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
@@ -27,24 +31,32 @@ interface Dispatcher: Runnable {
 
     var cmdHandler: CmdHandler
 
+    var redisLockUtil: RedisLockUtil
+
     /**
      * 线程任务执行方法
      */
     override fun run() {
+
+        MDC.put("CORRELATION_ID", UUID.randomUUID().toString())
         log.info("dispatcher[${properties.name}] start...")
 
         log.debug(properties.name + "-" + properties.coreSize + "-" + properties.maxSize + "-" + properties.queueSize
                 + "-" + properties.hungrySize + "-" + properties.keepAliveTime + "-" + properties.noTaskSleepSeconds)
 
-//        queue = ArrayBlockingQueue<Runnable>(properties.queueSize)
-//        pool = ThreadPoolExecutor(properties.coreSize, properties.maxSize, properties.keepAliveTime, TimeUnit.SECONDS, queue)
-
         while (true) {
 
+            var lock: RLock? = null
             try {
+
+                lock = redisLockUtil.getLock(properties.name)
+
+                lock.lock(properties.lockTime, TimeUnit.SECONDS)
+
                 if (queue.size >= properties.hungrySize) {
                     continue
                 }
+
 
                 val commands = cmdManager.lockAndListCommands(properties.name, properties.queueSize - queue.size)
                 // 队列没有任务则进行休眠
@@ -69,6 +81,8 @@ interface Dispatcher: Runnable {
                 }
             } catch (e: Exception) {
                 log.error("dispatcher[${properties.name}] error", e)
+            } finally {
+                lock?.unlock()
             }
         }
     }

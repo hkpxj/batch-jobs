@@ -16,7 +16,7 @@
 
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout
-                    pattern="%d{ISO8601} [%t] %highlight{%-5level} - %logger{1.} - %highlight{%m%n}{INFO=yellow,WARN=red}"/>
+                    pattern="%d{ISO8601} [%t] [%X{CORRELATION_ID}] %highlight{%-5level} - %logger{1.} - %highlight{%m%n}{INFO=yellow,WARN=red}"/>
         </Console>
 
         <Async name="ASYNC">

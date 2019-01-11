@@ -20,4 +20,6 @@ class DispatcherProperties {
     var noTaskSleepSeconds: Long = 5
 
     var hungrySize: Int = (queueSize * 0.8).toInt()
+
+    var lockTime: Long = 10
 }

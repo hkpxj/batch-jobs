@@ -1,5 +1,6 @@
 package com.airwallex.batchjobs.repository.model
 
+import com.airwallex.batchjobs.task.dispatcher.enums.CmdStatusEnum
 import java.util.*
 
 /**

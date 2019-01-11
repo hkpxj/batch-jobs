@@ -9,20 +9,8 @@ import com.airwallex.batchjobs.repository.model.BizCmdDO
  */
 interface CmdHandler {
 
-    /**
-     * 处理具体命令
-     *
-     * @param command
-     * @throws Exception
-     */
     @Throws(Exception::class)
     fun execute(command: BizCmdDO)
 
-    /**
-     * 任务执行失败的异常处理
-     *
-     * @param command
-     * @param failReason
-     */
     fun handlerException(command: BizCmdDO, failReason: String)
 }

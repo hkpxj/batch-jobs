@@ -32,13 +32,6 @@ abstract class BaseCmdHandler: CmdHandler {
     
     private val cmdError = "cmd[{}] error, exception information[{}]"
 
-
-    /**
-     * handler执行方法
-     *
-     * @param command  基础命令对象
-     * @throws Exception
-     */
     @Throws(Exception::class)
     override fun execute(command: BizCmdDO) {
 

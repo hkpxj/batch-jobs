@@ -4,8 +4,10 @@ import com.airwallex.batchjobs.configure.DispatcherStartProperties
 import com.airwallex.batchjobs.manager.CmdManager
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import org.slf4j.MDC
 import org.springframework.core.task.SimpleAsyncTaskExecutor
 import org.springframework.stereotype.Service
+import java.util.*
 import javax.annotation.PostConstruct
 
 /**
@@ -22,6 +24,8 @@ class DispatcherStart(var properties: DispatcherStartProperties,
 
     @PostConstruct
     fun init() {
+
+        MDC.put("CORRELATION_ID", UUID.randomUUID().toString())
         log.info("------- [${properties.name}] is starting...... -------")
         if (!properties.runFlag) {
             log.info("this machine can not run Dispatcher!")
