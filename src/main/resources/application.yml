@@ -43,3 +43,11 @@ dispatcher:
     queueSize: 1000
     hungrySize: 800
     noTaskSleepSeconds: 60
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    shutdown:
+      enabled: true
