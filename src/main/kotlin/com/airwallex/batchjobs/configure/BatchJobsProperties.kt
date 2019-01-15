@@ -1,7 +1,5 @@
 package com.airwallex.batchjobs.configure
 
-import org.springframework.boot.context.properties.ConfigurationProperties
-
 /**
  *
  * @author kun.hu
