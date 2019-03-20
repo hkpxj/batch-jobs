@@ -10,7 +10,7 @@ import org.springframework.scheduling.quartz.AdaptableJobFactory
  * @author kun.hu
  * @createDate 2019-01-09
  */
-class JobFactory: AdaptableJobFactory() {
+class JobFactory : AdaptableJobFactory() {
 
     /** The one of Spring BeanFactory  */
     @Autowired

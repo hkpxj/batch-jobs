@@ -8,7 +8,7 @@ import java.util.*
  * @createDate 2018/10/17
  * @projectName ledger
  */
-interface BaseDO{
+interface BaseDO {
     var id: String
     var createTime: Date?
     var lastUpdate: Date?

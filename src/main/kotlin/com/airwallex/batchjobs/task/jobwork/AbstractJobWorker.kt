@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit
  * @author kun.hu
  * @createDate 2019-01-10
  */
-interface AbstractJobWorker: Job {
+interface AbstractJobWorker : Job {
 
     val log: Logger
 
@@ -38,7 +38,7 @@ interface AbstractJobWorker: Job {
 
         log.warn("job is running: {}", jobConfigBO)
 
-        if(FlagEnum.TRUE.name == jobConfigBO.isHandExec){
+        if (FlagEnum.TRUE.name == jobConfigBO.isHandExec) {
 
             jobConfigBO.isHandExec = FlagEnum.FALSE.name
             setJobDetailBO(context, jobConfigBO)

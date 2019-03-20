@@ -31,7 +31,7 @@ class CmdManager {
 
     @Autowired
     private lateinit var bizCmdMapper: BizCmdMapper
-    
+
     @Autowired
     private lateinit var batchJobsProperties: BatchJobsProperties
 
@@ -56,7 +56,7 @@ class CmdManager {
             val cmdList: List<BizCmdDO> = bizCmdMapper.selectToDoCmdList(bizType, cmdNum, batchJobsProperties.envTag)
             cmdList.forEach {
 
-                if(status != it.isDoing){
+                if (status != it.isDoing) {
                     it.isDoing = status
                     it.serverIP = IPUtil.getLocalIP()
                     bizCmdMapper.update(it)

@@ -1,6 +1,5 @@
 package com.airwallex.batchjobs.repository.model.request
 
-import com.airwallex.batchjobs.repository.model.BaseDO
 import java.util.*
 
 /**

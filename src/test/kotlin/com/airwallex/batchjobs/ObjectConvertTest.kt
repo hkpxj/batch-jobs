@@ -1,6 +1,5 @@
 package com.airwallex.batchjobs
 
-import com.airwallex.batchjobs.manager.model.JobConfigBO
 import com.airwallex.batchjobs.task.dispatcher.Dispatcher
 
 /**

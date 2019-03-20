@@ -17,7 +17,7 @@ import java.util.*
  * @author kun.hu
  * @createDate 2019-01-11
  */
-abstract class BaseCmdHandler: CmdHandler {
+abstract class BaseCmdHandler : CmdHandler {
 
     val log: Logger = LogManager.getLogger()
 
@@ -25,11 +25,11 @@ abstract class BaseCmdHandler: CmdHandler {
     private lateinit var cmdManager: CmdManager
 
     var retryInterval: Int = 5
-    
+
     private val cmdStart = "cmd[{}] start, param[{}]"
-    
+
     private val cmdEnd = "cmd[{}] ends in [{}]ms, param[{}]"
-    
+
     private val cmdError = "cmd[{}] error, exception information[{}]"
 
     @Throws(Exception::class)
@@ -47,7 +47,7 @@ abstract class BaseCmdHandler: CmdHandler {
             val endTime = System.currentTimeMillis()
             log.info(cmdEnd, getHandlerName(), endTime - startTime, command.toString())
         } catch (e: Exception) {
-            
+
             log.error(cmdError, getHandlerName(), e)
             throw e
         }

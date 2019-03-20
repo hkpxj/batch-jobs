@@ -9,6 +9,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 class BatchJobsApplication
 
 fun main(args: Array<String>) {
-	runApplication<BatchJobsApplication>(*args)
+    runApplication<BatchJobsApplication>(*args)
 }
 

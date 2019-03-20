@@ -17,7 +17,7 @@ import javax.annotation.PreDestroy
  * @author kun.hu
  * @createDate 2019-01-10
  */
-interface Dispatcher: Runnable {
+interface Dispatcher : Runnable {
 
     val log: Logger
 

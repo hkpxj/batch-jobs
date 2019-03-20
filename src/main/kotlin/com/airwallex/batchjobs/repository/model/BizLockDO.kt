@@ -15,4 +15,4 @@ data class BizLockDO(
         var lockName: String = "",
         var envTag: String = "",
         var status: String = ""
-): BaseDO
+) : BaseDO

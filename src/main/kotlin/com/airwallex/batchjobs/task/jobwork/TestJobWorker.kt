@@ -30,7 +30,7 @@ class TestJobWorker(override val jobManager: JobManager,
 
         log.info("worker do")
 
-        for(i in 1..100) {
+        for (i in 1..100) {
             BizCmdDO().apply {
                 bizId = UUID.randomUUID().toString()
                 bizType = "TEST_ONE"

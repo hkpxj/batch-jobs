@@ -1,6 +1,5 @@
 package com.airwallex.batchjobs.repository.model
 
-import com.airwallex.batchjobs.task.dispatcher.enums.CmdStatusEnum
 import java.util.*
 
 /**
@@ -14,7 +13,7 @@ data class BizCmdDO(
         override var lastUpdate: Date? = Date(),
         override var version: Long? = 0,
         var bizId: String = UUID.randomUUID().toString(),
-        var bizType: String ="",
+        var bizType: String = "",
         var serverIP: String? = null,
         var failReason: String? = null,
         var envTag: String = "",
@@ -26,4 +25,4 @@ data class BizCmdDO(
         var nextExeTime: Date? = null,
         var enableStartDate: Date? = null,
         var enableEndDate: Date? = null
-): BaseDO
+) : BaseDO

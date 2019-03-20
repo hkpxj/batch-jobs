@@ -36,7 +36,7 @@ class BatchJobsConfigure {
     fun redissonProperties(): RedissonProperties = RedissonProperties()
 
     @Bean
-    fun redissonClient(redissonProperties: RedissonProperties): RedissonClient{
+    fun redissonClient(redissonProperties: RedissonProperties): RedissonClient {
 
         val config = Config()
         val serverConfig = config.useSingleServer()

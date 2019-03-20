@@ -21,8 +21,8 @@ import java.util.concurrent.TimeUnit
 class MyDispatcherTwo(@Qualifier("dispatcherTwoProperties") override var properties: DispatcherProperties,
                       override var cmdManager: CmdManager,
                       override var redisLockUtil: RedisLockUtil,
-                      @Qualifier("myHandlerTwo")override var cmdHandler: CmdHandler
-): Dispatcher {
+                      @Qualifier("myHandlerTwo") override var cmdHandler: CmdHandler
+) : Dispatcher {
     override val log: Logger = LogManager.getLogger()
 
     override var queue: BlockingQueue<Runnable> = ArrayBlockingQueue<Runnable>(properties.queueSize)

@@ -1,8 +1,6 @@
 package com.airwallex.batchjobs.manager.util
 
-import jdk.nashorn.internal.runtime.regexp.joni.Config.log
 import org.apache.logging.log4j.LogManager
-import org.springframework.util.StringUtils
 import java.net.Inet4Address
 import java.net.InetAddress
 import java.net.NetworkInterface

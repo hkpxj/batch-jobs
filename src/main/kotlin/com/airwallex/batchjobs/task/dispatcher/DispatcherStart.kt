@@ -17,7 +17,7 @@ import javax.annotation.PostConstruct
  */
 @Service
 class DispatcherStart(var properties: DispatcherStartProperties,
-                      private var dispatcherList: List<Dispatcher>,
+                      private val dispatcherList: List<Dispatcher>,
                       private val cmdManager: CmdManager) {
 
     private val log: Logger = LogManager.getLogger()

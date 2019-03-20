@@ -1,12 +1,6 @@
 package com.airwallex.batchjobs.task.dispatcher.handler
 
-import com.airwallex.batchjobs.manager.CmdManager
 import com.airwallex.batchjobs.repository.model.BizCmdDO
-import com.airwallex.batchjobs.task.dispatcher.CmdHandler
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
 
 /**
@@ -15,7 +9,7 @@ import org.springframework.stereotype.Component
  * @createDate 2019-01-10
  */
 @Component("myHandlerTwo")
-class MyHandlerTwo: BaseCmdHandler() {
+class MyHandlerTwo : BaseCmdHandler() {
 
     override fun getHandlerName(): String {
 

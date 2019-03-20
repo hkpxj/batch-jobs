@@ -8,7 +8,7 @@ package com.airwallex.batchjobs.task.dispatcher.enums
 enum class CmdStatusEnum {
     S, F, I, W, P;
 
-    companion object{
+    companion object {
 
         fun isCmdEnd(status: String): Boolean {
 

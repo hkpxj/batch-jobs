@@ -22,7 +22,7 @@ data class JobLogRequestDO(
         var machineIp: String? = null
 )
 
-fun JobLogDO.toJobLogRequestDO(): JobLogRequestDO{
+fun JobLogDO.toJobLogRequestDO(): JobLogRequestDO {
 
     return this.let {
         JobLogRequestDO().apply {

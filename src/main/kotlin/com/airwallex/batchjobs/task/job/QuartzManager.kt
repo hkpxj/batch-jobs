@@ -1,11 +1,10 @@
 package com.airwallex.batchjobs.task.job
 
-import com.airwallex.batchjobs.task.job.constant.JobConstant
 import com.airwallex.batchjobs.manager.model.JobConfigBO
+import com.airwallex.batchjobs.task.job.constant.JobConstant
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.quartz.*
-import org.quartz.impl.matchers.GroupMatcher
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.quartz.SchedulerFactoryBean
 import org.springframework.stereotype.Component

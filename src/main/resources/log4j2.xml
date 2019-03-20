@@ -27,9 +27,9 @@
 
     <Loggers>
         <Logger name="org.springframework" level="error"/>
-        <Logger name="com.googlecode.jsonrpc4j" level="error"/>
-        <Logger name="com.airwallex" level="debug"/>
-        <Logger name="com.airwallex.batchjobs.repository" level="debug"/>
+      <Logger name="com.googlecode.jsonrpc4j" level="info"/>
+      <Logger name="com.airwallex" level="info"/>
+      <Logger name="com.airwallex.batchjobs.repository" level="info"/>
         <Root level="WARN" additivity="false">
             <AppenderRef ref="ASYNC"/>
         </Root>
