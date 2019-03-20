@@ -38,6 +38,8 @@ class JobDispatcher {
             }
         } catch (e: Exception) {
             log.error("do job dispatcher error: {}", e)
+        } finally {
+            MDC.clear()
         }
     }
 

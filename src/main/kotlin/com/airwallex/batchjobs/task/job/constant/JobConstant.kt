@@ -7,9 +7,5 @@ package com.airwallex.batchjobs.task.job.constant
  */
 object JobConstant {
 
-    val JOB_DATA_MAP = "quartz.job.data"
-
-    val JOB_LOADING_N = "N"
-
-    val JOB_LOADING_Y = "Y"
+    const val JOB_DATA_MAP = "quartz.job.data"
 }
