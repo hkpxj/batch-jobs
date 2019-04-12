@@ -35,7 +35,8 @@ class JobManager {
     @Transactional
     fun lockJobAddLog(jobConfigBO: JobConfigBO): Boolean {
 
-        jobConfigMapper.selectForUpdateById(jobConfigBO.id.toString()) ?: return true
+        val jobConfigDO = jobConfigMapper.selectForUpdateById(jobConfigBO.id.toString())
+        jobConfigDO ?: return true
 
         val jobLogDO = getJobLog(jobConfigBO)
         val execTimes = jobLogMapper.selectCount(getJobLogRequest(jobLogDO))
@@ -46,6 +47,7 @@ class JobManager {
         jobLogMapper.insert(jobLogDO)
 
         jobConfigBO.jobLog = jobLogDO
+        jobConfigBO.retryTimes = jobConfigDO.retryTimes
 
         return false
     }
