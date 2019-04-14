@@ -53,7 +53,7 @@ interface AbstractJobWorker : Job {
 
             lock = redisLockUtil.getLock(jobConfigBO.jobName + "_" + jobConfigBO.jobGroup + "_" + jobConfigBO.envTag)
             lock.lock(20, TimeUnit.SECONDS)
-            if (jobManager.lockJobAddLog(jobConfigBO)) {
+            if (!jobManager.lockJobAddLog(jobConfigBO)) {
                 log.warn("lock job error:{} ", jobConfigBO)
                 lock.unlock()
                 return
